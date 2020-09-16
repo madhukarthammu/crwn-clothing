@@ -1,7 +1,7 @@
 import React from 'react';
 import './signup.styles.scss';
-
-import FormInput from '../FormInput/form-input.component';
+import { auth, createuserprofile } from '../../firebase/firebase.utils'
+import FormInput from '../FormInput/form-input.component'
 import CustomButton from '../Custom-Button/custom-button.component'
 
 class SignUp extends React.Component {
@@ -16,10 +16,26 @@ class SignUp extends React.Component {
         }
     }
 
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
 
-        this.setState({ email:'', password:'', displayName:'', confirmPassword:'' })
+        const { displayName, email, password, confirmPassword } = this.state;
+    
+        if (password !== confirmPassword) {
+          alert("passwords don't match");
+          return;
+        }
+        try {
+            const { user } = await auth.createUserWithEmailAndPassword(email, password);
+
+            await createuserprofile(user, {displayName});
+    
+            this.setState({ email:'', password:'', displayName:'', confirmPassword:'' });
+
+            console.log(this.state);
+        } catch(error) {
+            console.error(error);
+        }
     }
 
     handleChange = (event) => {

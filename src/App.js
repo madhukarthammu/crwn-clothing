@@ -12,23 +12,38 @@ import ShopPage from './pages/Shoppage/shoppage.component'
 
 import SigninSignup from './pages/SigninSignuppage/signinsignup.component'
 
+import { createuserprofile } from './firebase/firebase.utils'
+
 
 class App extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      currentUser: ''
+      currentUser: null
     }
   }
 
   unsubscribefromAuth = null;
 
   componentDidMount() {
-    this.unsubscribefromAuth = auth.onAuthStateChanged(user => {
-      this.setState({ currentUser: user });
-
-      console.log(user);
+    this.unsubscribefromAuth = auth.onAuthStateChanged(async userAuth => {
+      if(userAuth) {
+       const userref = await createuserprofile(userAuth);
+       
+       userref.onSnapshot(snapshot => {
+        this.setState({
+          currentUser: {
+            id: snapshot.id,
+            ...snapshot.data()
+          }
+        })
+       })
+   
+      }
+      else {
+        this.setState({currentUser: userAuth});
+      }
     })
   }
 
