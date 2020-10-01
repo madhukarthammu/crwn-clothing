@@ -12,7 +12,6 @@ import { connect } from 'react-redux'
 import setCurrentUser from './redux/user/user.actions'
 import CheckoutPage from './pages/Checkoutpage/checkout.component'
 
-
 class App extends React.Component {
 
   unsubscribefromAuth = null;
