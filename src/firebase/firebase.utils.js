@@ -16,18 +16,18 @@ const config = {
 
 firebase.initializeApp(config);
 
-export const createuserprofile = async (userAuth, additionaldata) => {
+export const createuserprofile = (userAuth, additionaldata) => {
     if (!userAuth) return;
 
     const userref = firestore.doc(`users/${userAuth.uid}`);
 
-    const snapShot =await userref.get(); 
+    const snapShot = userref.get(); 
 
     if(!snapShot.exists){
         const { email, displayName } = userAuth;
         const createdAt = new Date();
         try{
-          await userref.set({
+            userref.set({
                 displayName,
                 email,
                 createdAt,
@@ -69,10 +69,19 @@ export const convertCollectionsSnapshotToMap = collections => {
     }, {})
 }
 
+export const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+      const unsubscribe = auth.onAuthStateChanged(userAuth => {
+        unsubscribe();
+        resolve(userAuth);
+      }, reject);
+    });
+  };
+
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
-const provider = new firebase.auth.GoogleAuthProvider();
+export const provider = new firebase.auth.GoogleAuthProvider();
 
 provider.setCustomParameters({ prompt: 'select_account' });
 

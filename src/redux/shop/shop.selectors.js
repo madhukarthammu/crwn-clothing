@@ -22,3 +22,8 @@ export const selectCollectionsForPreview = createSelector(
     [SelectShop],
     shop => shop.isFetching
   )
+
+  export const SelectIsCollectionLoaded = createSelector(
+    [SelectShop],
+    shop => shop.collections
+  )
