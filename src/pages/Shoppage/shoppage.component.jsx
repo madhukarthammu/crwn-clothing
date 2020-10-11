@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import './shoppage.styles.scss'
 import CollectionOverview from '../../components/Collection-Overview/collection-overview.component'
 import CollectionPage from '../Collection/collection.component'
@@ -12,17 +12,11 @@ import {SelectIsCollectionFetching, SelectIsCollectionLoaded} from '../../redux/
 const CollectionsOverviewWithSpinner = WithSpinner(CollectionOverview);
 const CollectionPageWithSpinner = WithSpinner(CollectionPage);
 
-class ShopPage extends React.Component {
+const ShopPage = ({fetchCollectionStart,match, isFetchingCollections, isCollectionsLoaded}) => {
+  useEffect(() => {
+    fetchCollectionStart();
+  }, [fetchCollectionStart])
 
-    componentDidMount() {
-        const {fetchCollectionStart} = this.props
-
-        fetchCollectionStart();
-    }
-
-
-    render() {
-        const {match, isFetchingCollections, isCollectionsLoaded} = this.props;
         return (
             <div className="shop-page">
             <Route exact path={`${match.path}`} render={props => (
@@ -34,7 +28,7 @@ class ShopPage extends React.Component {
             </div>
         )
     }
-} 
+
 
 const mapStateToProps = createStructuredSelector({
     isFetchingCollections: SelectIsCollectionFetching,
