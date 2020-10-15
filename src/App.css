@@ -3,6 +3,13 @@ body {
   padding: 5px 40px;
 }
 
+@media screen and (max-width: 800px) {
+  body {
+    padding: 5px 10px;
+  }
+}
+
+
 a {
   text-decoration: none;
   color: black;
